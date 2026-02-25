@@ -727,6 +727,18 @@ class Config(args: Seq[String]) extends SilFrontendConfig(args, "Silicon") {
     noshort = true
   )
 
+  val pruneLines: ScallopOption[List[Int]] = opt[List[Int]]("pruneLines",
+    descr = "Line numbers to prune the program with respect to. Part of the dependency analysis tool.",
+    default = None,
+    noshort = true
+  )
+
+  val pruneExportFileName: ScallopOption[String] = opt[String]("pruneExportFileName",
+    descr = "Export file name for the pruned program (used with --pruneLines)",
+    default = Some("pruned"),
+    noshort = true
+  )
+
   val dependencyAnalysisPostProcessingMode: ScallopOption[Int] = opt[Int]("dependencyAnalysisPostProcessingMode",
     descr = "Postprocessing mode: 0=default, 1=disable memory footprint optimizations, 2=disable joining of graphs and all of 1 (does not compute dependencies between methods), 3=disable transitive edges and all of 2 (UNSOUND)",
     default = Some(0),
@@ -814,6 +826,13 @@ class Config(args: Seq[String]) extends SilFrontendConfig(args, "Silicon") {
     case (_, Some(true)) => Right(())
     case (_, _) =>
       Left(s"Option ${startDependencyAnalysisTool.name} requires option ${enableDependencyAnalysis.name}")
+  }
+
+  validateOpt(pruneLines, enableDependencyAnalysis) {
+    case (None, _) => Right(())
+    case (Some(_), Some(true)) => Right(())
+    case (Some(_), _) =>
+      Left(s"Option ${pruneLines.name} requires option ${enableDependencyAnalysis.name}")
   }
 
   validateOpt(startDebuggerAutomatically, enableDebugging) {
