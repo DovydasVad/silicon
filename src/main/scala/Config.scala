@@ -745,6 +745,12 @@ class Config(args: Seq[String]) extends SilFrontendConfig(args, "Silicon") {
     noshort = true
   )
 
+  val enableUnsatCores: ScallopOption[Boolean] = opt[Boolean]("enableUnsatCores",
+    descr = "Enables UNSAT cores",
+    default = Some(false),
+    noshort = true
+  )
+
   val computeVerificationProgressFileName: ScallopOption[String] = opt[String]("computeVerificationProgressFileName",
     descr = "Export file name for the verification progress output (used with --computeVerificationProgress)",
     default = Some("progressExport.txt"),
