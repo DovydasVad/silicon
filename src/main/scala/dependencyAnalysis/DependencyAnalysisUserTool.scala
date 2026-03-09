@@ -154,8 +154,6 @@ class DependencyAnalysisUserTool(fullGraphInterpreter: DependencyGraphInterprete
   }
 
   def handleVerificationProgressQuery(exportFileNameOpt: Option[String] = None): Unit = {
-    if(verificationErrors.nonEmpty) println(s"Fix verification failures first!")
-
     val ((optProgressPeter, optProgressLea, optInfo), optTime) = measureTime(fullGraphInterpreter.computeVerificationProgress())
     
     val output = s"$optInfo\nPeter: $optProgressPeter; Lea: $optProgressLea\nFinished in ${optTime}ms"
@@ -169,7 +167,6 @@ class DependencyAnalysisUserTool(fullGraphInterpreter: DependencyGraphInterprete
   }
 
   private def handleVerificationProgressDEBUGQuery(): Unit = {
-    if(verificationErrors.nonEmpty) println(s"Fix verification failures first!")
 
     println("\nNaive implementation")
     val ((naiveProgressPeter, naiveProgressLea, naiveInfo), naiveTime) = measureTime(fullGraphInterpreter.computeVerificationProgressNaive())
@@ -189,7 +186,6 @@ class DependencyAnalysisUserTool(fullGraphInterpreter: DependencyGraphInterprete
   }
 
   private def handleVerificationProgressNaiveQuery(): Unit = {
-    if(verificationErrors.nonEmpty) println(s"Fix verification failures first!")
 
     val ((naiveProgressPeter, naiveProgressLea, naiveInfo), naiveTime) = measureTime(fullGraphInterpreter.computeVerificationProgressNaive())
     //    println(s"Overall verification progress: $progress")
@@ -322,10 +318,9 @@ class DependencyAnalysisUserTool(fullGraphInterpreter: DependencyGraphInterprete
   }
 
   def handleVerificationGuidanceQuery(): Unit = {
-    if(verificationErrors.nonEmpty) {
-      println(s"Fix verification failures first!")
-      return
-    }
+
+    val failedAssertions = fullGraphInterpreter.getFailedAssertions
+    println(s"Failed assertions:\n\t${failedAssertions.mkString("\n\t")}\n")
 
     val assumptionRanking = fullGraphInterpreter.computeAssumptionRanking().filter(_._2 > 0.0)
     println(s"Assumptions and their impact on progress:\n\t${assumptionRanking.mkString("\n\t")}\n")
@@ -337,10 +332,9 @@ class DependencyAnalysisUserTool(fullGraphInterpreter: DependencyGraphInterprete
   }
 
   def handleVerificationGuidanceOldQuery(): Unit = {
-    if(verificationErrors.nonEmpty) {
-      println(s"Fix verification failures first!")
-      return
-    }
+
+    val failedAssertions = fullGraphInterpreter.getFailedAssertions
+    println(s"Failed assertions:\n\t${failedAssertions.mkString("\n\t")}\n")
 
     val assumptionRanking = fullGraphInterpreter.computeAssumptionRankingOld().filter(_._2 > 0)
     println(s"Assumptions and the number of dependents:\n\t${assumptionRanking.mkString("\n\t")}\n")
