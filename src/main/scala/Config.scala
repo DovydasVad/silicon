@@ -739,15 +739,15 @@ class Config(args: Seq[String]) extends SilFrontendConfig(args, "Silicon") {
     noshort = true
   )
 
-  val computeVerificationProgress: ScallopOption[Boolean] = opt[Boolean]("getVerificationProgress",
+  val computeVerificationProgress: ScallopOption[Boolean] = opt[Boolean]("computeVerificationProgress",
     descr = "Computes verification progress of the program",
     default = Some(false),
     noshort = true
   )
 
   val computeVerificationProgressFileName: ScallopOption[String] = opt[String]("computeVerificationProgressFileName",
-    descr = "Export file name for the verification progress information program (used with --computeVerificationProgress)",
-    default = Some("prunedProgress.vpr"),
+    descr = "Export file name for the verification progress output (used with --computeVerificationProgress)",
+    default = Some("progressExport.txt"),
     noshort = true
   )
 
